@@ -1,58 +1,68 @@
 from __future__ import annotations
 
+import os
+
 import gradio as gr
+from dotenv import load_dotenv
 
-from agent import StudySessionAgent
-from multimodal import combine_inputs
+from agent import run
 
-
-def build_study_brief(topic: str, notes: str, audio_file: str | None, image_file: str | None) -> str:
-    topic = (topic or "").strip() or "Current learning session"
-    combined_input = combine_inputs(topic, notes or "", audio_file, image_file)
-    agent = StudySessionAgent()
-    return agent.run(topic, combined_input)
+load_dotenv()
 
 
-with gr.Blocks(title="Study Session Coach") as demo:
+def build_summary(
+    notes: str,
+    audio_file: str | None,
+    image_file: str | None,
+) -> str:
+    key = os.getenv("OPENAI_API_KEY", "")
+    if not key:
+        return "OPENAI_API_KEY not set. Add it to your .env file."
+    if not any([(notes or "").strip(), audio_file, image_file]):
+        return "Please provide at least some notes, audio, or an image."
+    try:
+        return run(key, notes or "", audio_file, image_file)
+    except Exception as exc:
+        return f"Error: {exc}"
+
+
+with gr.Blocks(title="Multi modal notes summarizer") as demo:
     gr.Markdown(
-        """
-        # Study Session Coach
-        Turn rough notes, an optional voice recap, and an optional notes image into a study summary,
-        revision plan, and self-check quiz.
-        """
+        "# Multi modal notes summarizer\n"
+        "Add your notes and optionally an audio recap or image — get a clean summary."
     )
 
     with gr.Row():
         with gr.Column():
-            topic = gr.Textbox(
-                label="Topic or Goal",
-                placeholder="Example: LangChain tool calling, image captioning, retrieval pipelines",
-            )
             notes = gr.Textbox(
-                label="Study Notes",
-                lines=12,
-                placeholder="Paste your rough notes, transcript, or key points here.",
+                label="Notes",
+                lines=10,
+                placeholder="Paste rough notes here...",
             )
             audio_file = gr.Audio(
-                label="Optional Audio Recap",
+                label="Audio Recap (optional)",
                 type="filepath",
                 sources=["upload", "microphone"],
             )
             image_file = gr.Image(
-                label="Optional Notes Image",
+                label="Notes Image (optional)",
                 type="filepath",
             )
-            submit = gr.Button("Generate Study Brief", variant="primary")
+            submit = gr.Button("Summarise", variant="primary")
 
         with gr.Column():
-            output = gr.Markdown(label="Study Brief")
+            output = gr.Markdown(label="Summary")
 
     submit.click(
-        fn=build_study_brief,
-        inputs=[topic, notes, audio_file, image_file],
+        fn=lambda: "⏳ Generating summary...",
+        inputs=[],
+        outputs=output,
+        queue=False,
+    ).then(
+        fn=build_summary,
+        inputs=[notes, audio_file, image_file],
         outputs=output,
     )
-
 
 if __name__ == "__main__":
     demo.launch()

@@ -1,93 +1,66 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+import json
 
-from tools import (
-    build_revision_plan,
-    estimate_study_effort,
-    generate_quiz,
-    recommend_next_actions,
-    summarize_notes,
-)
+from openai import OpenAI
+
+from tools import SCHEMAS, execute
 
 
-@dataclass
-class ToolCall:
-    name: str
-    reason: str
+def run(
+    api_key: str,
+    notes: str,
+    audio_path: str | None,
+    image_path: str | None,
+) -> str:
+    client = OpenAI(api_key=api_key)
 
+    parts: list[str] = []
+    if notes:
+        parts.append(f"Notes:\n{notes}")
+    if audio_path:
+        parts.append(f"Audio file to transcribe: {audio_path}")
+    if image_path:
+        parts.append(f"Image file to describe: {image_path}")
 
-@dataclass
-class StudySessionAgent:
-    tool_log: list[ToolCall] = field(default_factory=list)
+    user_content = "\n\n".join(parts) if parts else "No content provided."
 
-    def call_tool(self, name: str, reason: str, fn, *args, **kwargs):
-        self.tool_log.append(ToolCall(name=name, reason=reason))
-        return fn(*args, **kwargs)
+    messages: list = [
+        {
+            "role": "system",
+            "content": (
+                "You are a notes summarizer. "
+                "Use the available tools to process any audio or image inputs first, then summarize all content together.\n\n"
+                "Output rules:\n"
+                "- Max 3 bullets total — merge related points across all modalities into broader themes, do not list every sub-point.\n"
+                "- Each bullet: one short sentence, max 12 words. No comma-separated lists inside bullets.\n"
+                "- If multiple inputs cover similar ground, merge them into one bullet — do not repeat.\n"
+                "- Infer a 2-4 word heading from the content.\n"
+                "- Plain markdown only. No intro sentence, no preamble, no bullet sub-items."
+            ),
+        },
+        {"role": "user", "content": user_content},
+    ]
 
-    def run(self, topic: str, combined_input: str) -> str:
-        if not combined_input.strip():
-            return "Please provide at least a topic or some notes to analyze."
-
-        summary = self.call_tool(
-            "summarize_notes",
-            "Create a compact session summary from the learner input.",
-            summarize_notes,
-            topic,
-            combined_input,
+    while True:
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=messages,
+            tools=SCHEMAS,
+            tool_choice="auto",
         )
-        effort = self.call_tool(
-            "estimate_study_effort",
-            "Estimate how much revision time the learner may need.",
-            estimate_study_effort,
-            combined_input,
-        )
-        plan = self.call_tool(
-            "build_revision_plan",
-            "Turn the notes into an actionable revision sequence.",
-            build_revision_plan,
-            topic,
-            combined_input,
-        )
-        quiz = self.call_tool(
-            "generate_quiz",
-            "Create short self-check questions from the study material.",
-            generate_quiz,
-            topic,
-            combined_input,
-        )
-        actions = self.call_tool(
-            "recommend_next_actions",
-            "Recommend clear next steps after the session.",
-            recommend_next_actions,
-            topic,
-            combined_input,
-        )
+        msg = response.choices[0].message
+        messages.append(msg)
 
-        tool_trace = "\n".join(
-            f"- `{entry.name}`: {entry.reason}" for entry in self.tool_log
-        )
-        plan_text = "\n".join(f"{index}. {item}" for index, item in enumerate(plan, start=1))
-        quiz_text = "\n".join(f"{index}. {item}" for index, item in enumerate(quiz, start=1))
-        action_text = "\n".join(f"- {item}" for item in actions)
+        if not msg.tool_calls:
+            return msg.content or ""
 
-        return f"""## Study Session Summary
-{summary}
-
-## Effort Estimate
-- Word count considered: {effort["word_count"]}
-- Difficulty score: {effort["difficulty_score"]}/5
-- Recommended revision time: {effort["revision_minutes"]} minutes
-
-## Revision Plan
-{plan_text}
-
-## Self-Check Quiz
-{quiz_text}
-
-## Next Actions
-{action_text}
-
-## Tool Trace
-{tool_trace}
-"""
+        for tc in msg.tool_calls:
+            result = execute(client, tc.function.name, json.loads(tc.function.arguments))
+            messages.append(
+                {
+                    "role": "tool",
+                    "tool_call_id": tc.id,
+                    "content": result,
+                }
+            )
