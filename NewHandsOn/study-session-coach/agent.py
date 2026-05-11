@@ -7,6 +7,10 @@ from openai import OpenAI
 from tools import SCHEMAS, execute
 
 
+def _word_count(text: str) -> int:
+    return len(text.split())
+
+
 def run(
     api_key: str,
     notes: str,
@@ -25,16 +29,20 @@ def run(
 
     user_content = "\n\n".join(parts) if parts else "No content provided."
 
+    input_words = _word_count(notes or "")
+    target_words = max(40, input_words // 4)
+
     messages: list = [
         {
             "role": "system",
             "content": (
                 "You are a notes summarizer. "
                 "Use the available tools to process any audio or image inputs first, then summarize all content together.\n\n"
-                "Output rules:\n"
-                "- Max 3 bullets total — merge related points across all modalities into broader themes, do not list every sub-point.\n"
-                "- Each bullet: one short sentence, max 12 words. No comma-separated lists inside bullets.\n"
-                "- If multiple inputs cover similar ground, merge them into one bullet — do not repeat.\n"
+                f"Output rules:\n"
+                f"- Target ~{target_words} words total in the summary (roughly 1/4 of the input length). "
+                "Scale bullet count to match: short inputs get 2-3 bullets, long inputs may use up to 6-8 bullets.\n"
+                "- Each bullet: one clear sentence. No comma-separated lists inside bullets.\n"
+                "- Merge overlapping points across modalities — do not repeat the same idea.\n"
                 "- Infer a 2-4 word heading from the content.\n"
                 "- Plain markdown only. No intro sentence, no preamble, no bullet sub-items."
             ),

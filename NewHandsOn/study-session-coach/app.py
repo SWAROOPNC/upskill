@@ -10,18 +10,34 @@ from agent import run
 load_dotenv()
 
 
+def _load_txt(path: str | None) -> str:
+    if not path:
+        return ""
+    try:
+        with open(path, encoding="utf-8") as f:
+            return f.read()
+    except Exception:
+        return ""
+
+
 def build_summary(
     notes: str,
+    txt_file: str | None,
     audio_file: str | None,
     image_file: str | None,
 ) -> str:
     key = os.getenv("OPENAI_API_KEY", "")
     if not key:
         return "OPENAI_API_KEY not set. Add it to your .env file."
-    if not any([(notes or "").strip(), audio_file, image_file]):
+
+    combined_notes = "\n\n".join(
+        t for t in [(notes or "").strip(), _load_txt(txt_file)] if t
+    )
+
+    if not any([combined_notes, audio_file, image_file]):
         return "Please provide at least some notes, audio, or an image."
     try:
-        return run(key, notes or "", audio_file, image_file)
+        return run(key, combined_notes, audio_file, image_file)
     except Exception as exc:
         return f"Error: {exc}"
 
@@ -38,6 +54,10 @@ with gr.Blocks(title="Multi modal notes summarizer") as demo:
                 label="Notes",
                 lines=10,
                 placeholder="Paste rough notes here...",
+            )
+            txt_file = gr.File(
+                label="Or upload a .txt file",
+                file_types=[".txt"],
             )
             audio_file = gr.Audio(
                 label="Audio Recap (optional)",
@@ -60,7 +80,7 @@ with gr.Blocks(title="Multi modal notes summarizer") as demo:
         queue=False,
     ).then(
         fn=build_summary,
-        inputs=[notes, audio_file, image_file],
+        inputs=[notes, txt_file, audio_file, image_file],
         outputs=output,
     )
 

@@ -1,0 +1,64 @@
+Mythos | Double-edged sword 
+The Anthropic AI model can not only identify vulnerabilities in cyberspace that humans may have missed, but also generate ways to exploit them, potentially even for non-experts
+Mythos is a large language model developed with general-purpose reasoning, coding, and autonomous tasks. Representational image. | Photo Credit: Reuters
+
+In cybersecurity, speed is everything. The faster a vulnerability is found and rectified, the safer the data is. For years, human expertise was needed to do this. Now, Artificial Intelligence can identify hidden vulnerabilities and write the code to patch them in hours, compressing a process that once took teams of experts days or weeks. But what happens when the same AI increases the risk?
+
+The International Monetary Fund (IMF) has warned that while AI could strengthen cyber defence, it could also make cyberattacks faster, cheaper, and accessible even to non-experts. The risks are particularly serious for the financial sector, which relies heavily on shared digital infrastructure like software, cloud services, payment networks, and interconnected databases.
+
+In a new report, the IMF singled out Anthropic’s Claude Mythos Preview to show how quickly risks are rising. Mythos is a large language model developed with general-purpose reasoning, coding, and autonomous tasks.
+
+This makes it great at identifying security vulnerabilities, but experts and the tech company itself are worried about its potential risks.
+
+In April, Anthropic announced that Mythos would not be released publicly because of its ability to identify unknown flaws in IT systems, which could potentially be exploited by hackers. But on April 22, it confirmed it was investigating reports that unauthorised users had gained access to Mythos.
+
+Mythos can find ‘zero-day’ or undiscovered vulnerabilities in real open-source codebases. It has also demonstrated capabilities to reverse-engineer exploits in closed-source software and turn N-day, or known but not yet widely patched, vulnerabilities into exploits. In short, Mythos can not only identify vulnerabilities that humans may have missed, but also generate ways to exploit them, potentially even for non-experts.
+
+“The vulnerabilities it finds are often subtle or difficult to detect. Many of them are ten or twenty years old, with the oldest we have found so far being a now-patched 27-year-old bug in OpenBSD — an operating system known primarily for its security,” Anthropic said in a blog.
+
+The company also revealed how quickly these capabilities emerged. Anthropic said its engineers were able to ask Mythos to find vulnerabilities and produce a complete, working exploit in just one night. “In other cases, we’ve had researchers develop scaffolds that allow Mythos Preview to turn vulnerabilities into exploits without any human intervention,” the company wrote.
+
+Fears of cyberattacks
+More worryingly, the company revealed that these capabilities were not intentionally trained into the system. The blog noted that Mythos was able to develop these capabilities “very quickly”, even though the AI was not trained specifically for them. “Rather, they emerged as a downstream consequence of general improvements in code, reasoning, and autonomy.”
+
+The challenge is that AI is already deeply embedded within the financial system. Banks and financial institutions use AI for several banking activities, customer service, and risk management. AI-supported systems are increasingly being used to identify suspicious activity, detect vulnerabilities, and respond to cyber threats faster than traditional systems. Powerful systems like Mythos raise fears that cyberattacks could become more scalable, automated, and accessible. This threat is more real because many financial institutions still rely on interconnected legacy infrastructure that is difficult to patch or upgrade quickly, making the risks systemic.
+
+The IMF has urged governments and regulators not to treat AI “as a purely technical or operational issue” and instead build resilience through supervision, coordination, and preparedness. Governments are beginning to respond. Regulators and financial authorities across the world are increasingly warning that AI could amplify cyber risks in critical sectors.
+
+
+In cybersecurity, speed is everything. The faster a vulnerability is found and rectified, the safer the data is. For years, human expertise was needed to do this. Now, Artificial Intelligence can identify hidden vulnerabilities and write the code to patch them in hours, compressing a process that once took teams of experts days or weeks. But what happens when the same AI increases the risk?
+
+The International Monetary Fund (IMF) has warned that while AI could strengthen cyber defence, it could also make cyberattacks faster, cheaper, and accessible even to non-experts. The risks are particularly serious for the financial sector, which relies heavily on shared digital infrastructure like software, cloud services, payment networks, and interconnected databases.
+
+Also Read: Has Anthropic’s Mythos made the Cure worse than the disease?
+
+In a new report, the IMF singled out Anthropic’s Claude Mythos Preview to show how quickly risks are rising. Mythos is a large language model developed with general-purpose reasoning, coding, and autonomous tasks.
+
+This makes it great at identifying security vulnerabilities, but experts and the tech company itself are worried about its potential risks.
+
+In April, Anthropic announced that Mythos would not be released publicly because of its ability to identify unknown flaws in IT systems, which could potentially be exploited by hackers. But on April 22, it confirmed it was investigating reports that unauthorised users had gained access to Mythos.
+
+Mythos can find ‘zero-day’ or undiscovered vulnerabilities in real open-source codebases. It has also demonstrated capabilities to reverse-engineer exploits in closed-source software and turn N-day, or known but not yet widely patched, vulnerabilities into exploits. In short, Mythos can not only identify vulnerabilities that humans may have missed, but also generate ways to exploit them, potentially even for non-experts.
+
+“The vulnerabilities it finds are often subtle or difficult to detect. Many of them are ten or twenty years old, with the oldest we have found so far being a now-patched 27-year-old bug in OpenBSD — an operating system known primarily for its security,” Anthropic said in a blog.
+
+Also Read: Should the Mythos AI model raise cybersecurity alarms?
+
+The company also revealed how quickly these capabilities emerged. Anthropic said its engineers were able to ask Mythos to find vulnerabilities and produce a complete, working exploit in just one night. “In other cases, we’ve had researchers develop scaffolds that allow Mythos Preview to turn vulnerabilities into exploits without any human intervention,” the company wrote.
+
+ IT industry, Govt. examine cybersecurity implications of Anthropic’s Mythos model
+
+Fears of cyberattacks
+More worryingly, the company revealed that these capabilities were not intentionally trained into the system. The blog noted that Mythos was able to develop these capabilities “very quickly”, even though the AI was not trained specifically for them. “Rather, they emerged as a downstream consequence of general improvements in code, reasoning, and autonomy.”
+
+The challenge is that AI is already deeply embedded within the financial system. Banks and financial institutions use AI for several banking activities, customer service, and risk management. AI-supported systems are increasingly being used to identify suspicious activity, detect vulnerabilities, and respond to cyber threats faster than traditional systems. Powerful systems like Mythos raise fears that cyberattacks could become more scalable, automated, and accessible. This threat is more real because many financial institutions still rely on interconnected legacy infrastructure that is difficult to patch or upgrade quickly, making the risks systemic.
+
+The IMF has urged governments and regulators not to treat AI “as a purely technical or operational issue” and instead build resilience through supervision, coordination, and preparedness. Governments are beginning to respond. Regulators and financial authorities across the world are increasingly warning that AI could amplify cyber risks in critical sectors.
+
+In India, after reports emerged that unauthorised users may have gained access to Mythos, Finance Minister Nirmala Sitharaman convened a meeting with Electronics and IT Minister Ashwini Vaishnaw, bankers, and other stakeholders to assess the risks posed by AI and its implications for financial data security.
+
+Banks were advised to establish mechanisms for real-time threat intelligence sharing with other banks, the Indian Computer Emergency Response Team (CERT-In), and relevant agencies. Banks were also asked to report suspicious activity and cyber incidents more proactively. The government also set up a committee under C.S. Setty, chairman of State Bank of India, to assess the risks posed by Mythos and recommend safeguards.
+
+Separately, the Reserve Bank of India introduced a framework in 2025 to promote the responsible and ethical adoption of AI in the financial sector.
+
+Still, Mythos reveals a deeper problem in the system. The IMF points out that the risks are not limited to the financial sector alone. Sectors like energy, telecommunications, and public services are also vulnerable. Dependence on a small number of software platforms, cloud providers, and AI models could further increase the impact because many sectors rely on the same infrastructure.
